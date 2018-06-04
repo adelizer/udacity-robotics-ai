@@ -1,0 +1,3 @@
+grid: ['green', 'red', 'red', 'green', 'green']
+z: ['red', 'red', 'green']
+u: [1,0,1]
