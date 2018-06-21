@@ -17,12 +17,12 @@ def main():
         u = world['u']
     print_world(grid)
 
-
-    p = get_test_distribution(grid)
+    p = get_uniform_vector(grid)
     print_dist(p)
-    p = move(p, [0, 1], 0.8)
-    print_dist(p)
-
+    for i in range(len(z)):
+        p = sense(p, z[i], grid, world['hit'], world['miss'])
+        p = move(p, u[i], world['move_exact'])
+        print_dist(p)
 
 
 if __name__ == '__main__':

@@ -24,30 +24,28 @@ def get_uniform_vector(grid):
         for j in range(w):
             row.append(1./(l*w))
         uniform_probability.append(row)
-    # uniform_probability = {(i, j): 1./(l*w) for i in range(l) for j in range(w)}
     return uniform_probability
 
 
-def sense(prior, z, world, pHit, pMiss):
+def sense(p, z, world, hit, miss):
     """measurement update function"""
-    l = len(prior)
-    w = len(prior[0])
-    q = [[None] * w]*l
-    for arr in q:
-        print(arr)
+    print("performing measurement:{} ".format(z))
+    l = len(p)
+    w = len(p[0])
+    q = []
     for i in range(l):
-        for j in range(w):
-            print(i, j, world[i][j], z)
-            if z == world[i][j]:
-                q[i][j] = 1
+        row = []
+        for j in range(len(p[0])):
+            if world[i][j] == z:
+                row.append(p[i][j] * hit)
             else:
-                q[i][j] = 0
-            for arr in q:
-                print(arr)
+                row.append(p[i][j] * miss)
+        q.append(row)
+
     return normalize(q)
 
 
-def move(p, u, motion_prop):
+def move(p, u, motion_exact):
     """Circular in exact motion"""
     print("performing motion:{} ".format(u))
     l = len(p)
@@ -56,7 +54,7 @@ def move(p, u, motion_prop):
     for i in range(l):
         row = []
         for j in range(w):
-            row.append(p[(i-u[0])%l][(j-u[1])%w] * motion_prop + p[i][j] * (1-motion_prop))
+            row.append(p[(i-u[1])%l][(j-u[0])%w] * motion_exact + p[i][j] * (1-motion_exact))
         q.append(row)
 
     return normalize(q)
@@ -74,5 +72,6 @@ def normalize(q):
 def get_entropy(p):
     q = 0
     for i in range(len(p)):
-        q += p[i] * log(p[i])
+        for j in range(len(p[0])):
+            q += p[i][j] * log(p[i][j])
     return -1 * q
