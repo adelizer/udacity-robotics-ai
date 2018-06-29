@@ -33,10 +33,8 @@ class matrix:
 
     def show(self):
         for i in range(self.dimx):
-            print
-            self.value[i]
-        print
-        ' '
+            print(self.value[i])
+        print(' ')
 
     def __add__(self, other):
         # check if correct dimensions
