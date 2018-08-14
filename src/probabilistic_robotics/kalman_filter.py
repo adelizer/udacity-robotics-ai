@@ -1,5 +1,5 @@
 import numpy as np
-from src.matrix import matrix
+from src.probabilistic_robotics.matrix import matrix
 
 
 class KalmanFilter(object):

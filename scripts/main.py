@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
-from src.probability import get_uniform_vector, sense, move, get_entropy, get_test_distribution
-from src.kalman import KalmanFilter
-from utils import print_world, print_dist
+from src.probabilistic_robotics.histogram_filter import get_uniform_vector, sense, move
+from src.probabilistic_robotics.kalman_filter import KalmanFilter
+from src.probabilistic_robotics.robot import Robot
+from src.probabilistic_robotics.utils import print_world, print_dist, resambling_wheel
+import random
 import logging
 import yaml
 import io
@@ -27,7 +29,7 @@ def main():
 
     print('#'*80 + "\n\t\t\t\t Week 2 \n" + '#'*80)
 
-    # define system transition and observation matrices
+    # TODO: parametriz matrices
     dt = 0.1
     F = [[1,0,dt,0], [0,1,0,dt], [0,0,1,0], [0,0,0,1]]
     H = [[1,0,0,0], [0,1,0,0]]
@@ -40,6 +42,15 @@ def main():
     u = [0., 0.]
     for i in range(len(z)):
         k.filter(u, [[z[i][0]], [z[i][1]]])
+
+    print('#'*80 + "\n\t\t\t\t Particle filters\n" + '#'*80)
+
+    N = 1000
+    p = []
+    for i in range(N):
+        x = Robot()
+        x.set_noise(0.05, 0.05, 5.0)
+        p.append(x)
 
 
 if __name__ == '__main__':

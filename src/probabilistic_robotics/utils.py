@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import random
 
 def print_dist(dist):
     print("Probability distribution: \n")
@@ -22,3 +22,23 @@ def print_world(grid):
             s += '(%s), \t' % grid[i][j]
         print(s)
     print('')
+
+
+def resambling_wheel(data):
+    N = len(data)
+    s = sum(data)
+    for i in range(N):
+        data[i] = data[i] / s
+    print(sum(data))
+    ret = []
+    c = [data[0]]
+    for i in range(1, N):
+        c.append(c[i-1] + data[i])
+    u = random.uniform(0, 1.0/N)
+    j = 0
+    for i in range(N):
+        while u > c[j]:
+            j += 1
+        ret.append(j) # output
+        u = u + 1.0 / N # next spoke
+    print(ret)
