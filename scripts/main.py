@@ -3,7 +3,7 @@
 from src.probabilistic_robotics.histogram_filter import get_uniform_vector, sense, move
 from src.probabilistic_robotics.kalman_filter import KalmanFilter
 from src.probabilistic_robotics.robot import Robot
-from src.probabilistic_robotics.utils import print_world, print_dist, resambling_wheel
+from src.probabilistic_robotics.utils import print_world, print_dist, resampling_wheel
 import random
 import logging
 import yaml

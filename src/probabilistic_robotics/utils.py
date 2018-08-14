@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import random
+import numpy as np
+
 
 def print_dist(dist):
     print("Probability distribution: \n")
@@ -24,21 +26,32 @@ def print_world(grid):
     print('')
 
 
-def resambling_wheel(data):
-    N = len(data)
+def gaussian(start, end, N, mu, sig):
+    x = np.linspace(start, end, N)
+    return normalize(np.exp(-np.power(x - mu, 2.) / (2 * np.power(sig, 2.))))
+
+
+def normalize(data):
     s = sum(data)
-    for i in range(N):
-        data[i] = data[i] / s
-    print(sum(data))
+    for i in range(len(data)):
+        data[i] /= s
+    return data
+
+
+def resampling_wheel(data):
+    N = len(data)
     ret = []
     c = [data[0]]
     for i in range(1, N):
+        # calculate cumulative sum
         c.append(c[i-1] + data[i])
+
+    # start with the first spoke at random interval
     u = random.uniform(0, 1.0/N)
     j = 0
     for i in range(N):
         while u > c[j]:
             j += 1
-        ret.append(j) # output
-        u = u + 1.0 / N # next spoke
-    print(ret)
+        ret.append(j)
+        u = u + 1.0 / N
+    return ret
