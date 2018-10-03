@@ -34,7 +34,7 @@ def gaussian(start, end, N, mu, sig):
 def normalize(data):
     s = sum(data)
     for i in range(len(data)):
-        data[i] /= s
+        data[i] /= float(s)
     return data
 
 

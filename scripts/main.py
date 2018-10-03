@@ -2,12 +2,13 @@
 
 from src.probabilistic_robotics.histogram_filter import get_uniform_vector, sense, move
 from src.probabilistic_robotics.kalman_filter import KalmanFilter
-from src.probabilistic_robotics.robot import Robot
-from src.probabilistic_robotics.utils import print_world, print_dist, resampling_wheel
+from src.probabilistic_robotics.robot import Robot, eval
+from src.probabilistic_robotics.utils import print_world, print_dist, resampling_wheel, normalize
 import random
 import logging
 import yaml
 import io
+
 
 
 def main():
@@ -29,7 +30,7 @@ def main():
 
     print('#'*80 + "\n\t\t\t\t Week 2 \n" + '#'*80)
 
-    # TODO: parametriz matrices
+    # TODO: parametrize matrices
     dt = 0.1
     F = [[1,0,dt,0], [0,1,0,dt], [0,0,1,0], [0,0,0,1]]
     H = [[1,0,0,0], [0,1,0,0]]
@@ -45,13 +46,40 @@ def main():
 
     print('#'*80 + "\n\t\t\t\t Particle filters\n" + '#'*80)
 
-    N = 1000
+    myrobot = Robot()
+    myrobot = myrobot.move(0.1, .1)
+    print(myrobot)
+    N = 100
     p = []
     for i in range(N):
         x = Robot()
-        x.set_noise(0.05, 0.05, 5.0)
+        x.set_noise(0.05, 0.05, 5)
         p.append(x)
 
+    print(eval(myrobot, p))
 
+    for t in range(10):
+        myrobot = myrobot.move(0.1, .1)
+        Z = myrobot.sense()
+
+        p2 = []
+        for i in range(N):
+            p2.append(p[i].move(0.1, .1))
+
+        p = p2
+        w = []
+        for i in range(N):
+            w.append(p[i].measurement_prob(Z))
+
+        new_indices = resampling_wheel(normalize(w))
+        p3 = []
+        for i in range(N):
+            p3.append(p[new_indices[i]])
+        p = p3
+        print(eval(myrobot, p))
+
+    # for i in range(N):
+    #     print(p[i])
+    # print(myrobot)
 if __name__ == '__main__':
     main()
