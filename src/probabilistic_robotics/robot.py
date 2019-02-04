@@ -75,6 +75,7 @@ class Robot:
 
     def measurement_prob(self, measurement):
         # calculates how likely a measurement should be
+        # TODO: Investigate + implement the likelihood equation
         prob = 1.0
         for i in range(len(landmarks)):
             dist = sqrt((self.x - landmarks[i][0]) ** 2 + (self.y - landmarks[i][1]) ** 2)
